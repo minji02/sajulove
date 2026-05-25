@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>사주연애</title>
+    <style>
+      /* 웹 폰트 불러오기 (Noto Sans 두께 다양하게 추가) */
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap");
+
+      @font-face {
+        font-family: "S-CoreDream";
+        src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff")
+          format("woff");
+        font-weight: 300;
+      }
+      @font-face {
+        font-family: "S-CoreDream";
+        src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff")
+          format("woff");
+        font-weight: 600;
+      }
+      @font-face {
+        font-family: "S-CoreDream";
+        src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-7ExtraBold.woff")
+          format("woff");
+        font-weight: 700;
+      }
+      @font-face {
+        font-family: "MaruBuri";
+        src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/MaruBuri-Regular.woff")
+          format("woff");
+        font-weight: 400;
+      }
+
+      /* 기본 설정 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        word-wrap: break-word;
+        word-break: keep-all;
+      }
+
+      body {
+        background-color: #f5f5f5; /* PC 화면에서 보일 때 바깥 배경색 */
+        font-family: "Noto Sans KR", sans-serif;
+        display: flex;
+        justify-content: center;
+      }
+
+      /* 모바일 뷰 컨테이너 */
+      .mobile-container {
+        width: 100%;
+        max-width: 430px; /* 아이폰 Pro Max 너비 기준 */
+        background: linear-gradient(
+          180deg,
+          #c8d9e6 0%,
+          rgba(249, 249, 249, 0.98) 25%,
+          #f9f9f9 60%,
+          #ffeceb 100%
+        );
+        min-height: 100vh;
+        padding: 60px 24px 120px 24px;
+        position: relative;
+        color: #222222;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      /* 헤더 부분 (간격 2배 넓힘) */
+      .header {
+        text-align: center;
+        margin-bottom: 120px;
+      }
+      .header h1 {
+        font-size: 48px;
+        font-family: "S-CoreDream", sans-serif;
+        font-weight: 300;
+        color: #000;
+        margin-bottom: 12px;
+      }
+      .header p {
+        font-size: 16px;
+        font-family: "MaruBuri", serif;
+        color: #000;
+        line-height: 1.5;
+      }
+
+      /* 소개 텍스트 */
+      .intro {
+        text-align: center;
+        font-size: 14px;
+        font-weight: 400; /* 한 단계 올림 */
+        line-height: 1.6;
+        margin-bottom: 40px;
+        color: #000;
+      }
+
+      /* 하트(border) 아이콘 장식 - 짝대기 하트 짝대기 적용 */
+      .divider-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 48px;
+        width: 100%;
+        gap: 16px; /* 선과 아이콘 사이 간격 */
+      }
+      .divider-icon::before,
+      .divider-icon::after {
+        content: "";
+        flex: 1; /* 양쪽 여백을 꽉 채우도록 뻗어나감 */
+        height: 0.5px; /* 짝대기 두께 */
+        background-color: #2f4156;
+        opacity: 0.5;
+      }
+      .divider-icon svg {
+        width: 16px;
+        height: auto;
+        flex-shrink: 0;
+      }
+
+      /* 공통 섹션 제목 */
+      .section-title {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .section-title.features {
+        font-family: "S-CoreDream", sans-serif;
+        font-size: 24px;
+        font-weight: 300; /* 사주연애 부분은 300 유지 */
+      }
+      .section-title.features span {
+        font-size: 18px;
+        font-weight: 700; /* 뭐가 다른가요?! 부분은 굵게 */
+      }
+      .section-title.normal {
+        font-size: 18px;
+        font-weight: 800; /* 한 단계 올림 */
+      }
+
+      /* 박스 (특징, 안내사항) */
+      .info-box {
+        border-radius: 8px;
+        padding: 24px 20px;
+        margin-bottom: 48px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      /* 특징 아이템 */
+      .feature-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .feature-title {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .feature-title .num {
+        color: #537193;
+        font-size: 20px;
+        font-weight: 800; /* 한 단계 올림 */
+      }
+      .feature-title .txt {
+        font-size: 16px;
+        font-weight: 600; /* 한 단계 올림 */
+        line-height: 1.4;
+      }
+      .feature-title .highlight {
+        color: #537193;
+        font-weight: 800; /* 한 단계 올림 */
+      }
+      .feature-desc {
+        font-size: 13px;
+        font-weight: 400; /* 한 단계 올림 */
+        line-height: 1.7;
+        color: #444444;
+      }
+      .feature-desc .highlight {
+        color: #537193;
+        font-weight: 800; /* 한 단계 올림 */
+      }
+
+      /* 공지 아이템 */
+      .notice-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .notice-title {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 800; /* 한 단계 올림 */
+        line-height: 1.4;
+      }
+      .notice-title .icon {
+        font-size: 16px;
+        color: #2f4156;
+      }
+      .notice-desc {
+        font-size: 13px;
+        font-weight: 400; /* 한 단계 올림 */
+        line-height: 1.7;
+        color: #000;
+      }
+
+      /* FAQ 아코디언 */
+      .faq-list {
+        margin-bottom: 40px;
+        width: 100%;
+      }
+      .faq-item {
+        border-bottom: 0.5px solid #444444;
+        padding: 16px 16px;
+      }
+      .faq-item:last-child {
+        border-bottom: none;
+      }
+      .faq-item summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 500; /* 한 단계 올림 */
+        line-height: 1.5;
+        color: #222222;
+        cursor: pointer;
+        list-style: none;
+      }
+      .faq-item summary::-webkit-details-marker {
+        display: none;
+      }
+      /* 우측 꺾쇠 화살표 커스텀 */
+      .faq-item summary::after {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid #222222;
+        border-bottom: 2px solid #222222;
+        transform: rotate(45deg);
+        transition: transform 0.3s ease;
+        margin-left: 16px;
+        display: inline-block;
+      }
+      .faq-item[open] summary::after {
+        transform: rotate(-135deg);
+        margin-top: 4px;
+      }
+      .faq-answer {
+        margin-top: 12px;
+        font-size: 13px;
+        font-weight: 400; /* 한 단계 올림 */
+        line-height: 1.7;
+        color: #222222;
+        padding: 8px 0 0 0; /* 배경색 없이 깔끔하게 */
+      }
+
+      /* 하단 고정 신청 버튼 */
+      .cta-btn-wrapper {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 430px;
+        padding: 0 24px;
+        z-index: 100;
+      }
+      .cta-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 52px;
+        background-color: #e24f63;
+        color: white;
+        font-size: 15px;
+        font-family: "Noto Sans KR", sans-serif;
+        font-weight: 700;
+        border-radius: 30px;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(226, 79, 99, 0.3);
+        transition:
+          background-color 0.2s,
+          transform 0.1s;
+      }
+      .cta-btn:active {
+        background-color: #c94052;
+        transform: scale(0.98);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mobile-container">
+      <!-- Header -->
+      <div class="header">
+        <h1>사주연애</h1>
+        <p>
+          사주로 만나는 운명의 상대<br />운명은 정해져 있고, 당신은 오기만 하면
+          돼 🔮
+        </p>
+      </div>
+
+      <!-- Intro -->
+      <div class="intro">
+        사주와 연애라니 무슨 조합인가 싶으시죠?<br />
+        아무것도 모르는 상대와 단 몇 마디만 나누고 끝나는 소개팅,<br />
+        내향인에겐 버거운 술과 함께 하는 소개팅…<br />
+        소개팅들은 정말 많지만 짧은 시간동안 아무 정보 없이<br />
+        많은 상대를 파악하고 호감을 갖기에는 한계가 있어요.<br />
+        그!래!서! 저희는 “사주”를 결합하기로 했답니다.<br />
+        부족한 시간과 재미를 사주로 채워드립니다!!<br />
+        개인 사주 해석부터 연애관, 운세, 궁합까지~ 다 봐드립니다.<br /><br />
+        저희 사주연애와 함께하는 소개팅에서<br />
+        내 사주 속 '그 사람'이 오늘 이 자리에 만날 지도 모릅니다!<br />
+        나이, 직업 같은 딱딱한 정보 대신 사람 자체에 집중하며<br />
+        운명이 점지해 준 당신의 인연을 찾아보세요.
+      </div>
+
+      <!-- 하트/장식 아이콘 (짝대기-하트-짝대기) -->
+      <div class="divider-icon">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#2F4156"
+          stroke-width="0.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+          ></path>
+        </svg>
+      </div>
+
+      <!-- Section 1: Features -->
+      <div class="section-title features">
+        사주연애, <span>뭐가 다른가요?!</span>
+      </div>
+
+      <div class="info-box">
+        <div class="feature-item">
+          <div class="feature-title">
+            <span class="num">1.</span>
+            <span class="txt">난 어떤 사람일까? 누구와 만나면 좋을까?</span>
+          </div>
+          <div class="feature-desc">
+            취미/관심 + 사주 분석을 통한
+            <span class="highlight">프로필 카드</span>를 제공해드립니다.<br />
+            나는 어떤 사람인지, 나와 맞는 사람은 누구인지 확인해보세요!<br />
+            소개팅 전날 다른 참가자의 프로필 카드도 공유해드립니다.<br />
+            미리 다른 참가자들에 대해 알아보는 시간을 가져보세요.
+          </div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-title">
+            <span class="num">2.</span>
+            <span class="txt"
+              >소개팅 하면 빠질 수 없는
+              <span class="highlight">일대일 대화</span> 시간!</span
+            >
+          </div>
+          <div class="feature-desc">
+            <span class="highlight">전체 자기소개</span>부터
+            <span class="highlight">6인 1조 아이스브레이킹</span> 시간을 거쳐 한
+            사람 한 사람 진솔하게 대화해볼 수 있는 일대일 대화 시간이 준비되어
+            있습니다.<br />
+            서로의 프로필 카드, 질문 카드를 보며 대화를 나눠보세요.
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Notice -->
+      <div class="section-title normal">사전 안내 공지</div>
+
+      <div class="info-box" style="gap: 20px">
+        <div class="notice-item">
+          <div class="notice-title">
+            <span class="icon">⏰</span>
+            <span>원활한 진행을 위해 시간을 꼭 지켜주세요!</span>
+          </div>
+          <div class="notice-desc">
+            첫시간은 전체 자기소개, 아이스브레이킹 시간입니다.<br />
+            지각하실 경우 전체 참가자들과 친해질 수 있는 기회가 줄어들게 된다는
+            점 참고 부탁드립니다.
+          </div>
+        </div>
+
+        <div class="notice-item">
+          <div class="notice-title">
+            <span class="icon">☕</span>
+            <span>간단한 다과 및 음료만 제공됩니다.</span>
+          </div>
+          <div class="notice-desc">
+            본 프로그램에는 식사 및 주류가 제공되지 않습니다.<br />
+            진솔한 만남을 위해 가볍게 드실 수 있는 다과와 음료만 제공되는 점
+            양해 바랍니다.
+          </div>
+        </div>
+
+        <div class="notice-item">
+          <div class="notice-title">
+            <span class="icon">🥂</span>
+            <span>뒤풀이 참석 비용은 참가비와 별도입니다.</span>
+          </div>
+          <div class="notice-desc">
+            프로그램 종료 후 진행되는 뒤풀이는 희망자에 한해 자율적으로 참여하실
+            수 있습니다.<br />
+            뒤풀이 참석 시 발생하는 비용은 참가비와 별도로 참가자들끼리 1/N
+            정산해주시면 됩니다.
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: FAQ -->
+      <div class="section-title normal">자주 묻는 질문</div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>왜 이런 프로그램을 하나요?</summary>
+          <div class="faq-answer">
+            신년을 맞아 사주에 연애라는 요소를 결합해 보면 어떨까 하는
+            아이디어에서 시작된 프로그램입니다.<br />
+            너무 진지한 소개팅이나 미팅이 아니라, 부담 없이 사람들을 만나고 즐길
+            수 있는 콘텐츠형 모임을 만들어 보고 싶어 기획하게 되었습니다.<br />
+            (저희 사이비 아닙니다…믿어주세요…😭)
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>사주는 어떻게 분석하나요?</summary>
+          <div class="faq-answer">
+            참가가 확정되신 분들에 한해서, 사주 및 입금을 위한 확정폼 링크를
+            안내해드립니다.<br />
+            이때 적어주신 출생 정보를 통해 사주를 분석해서 프로필 카드를
+            생성합니다.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>모임 공지와 장소는 어떻게 확인하나요?</summary>
+          <div class="faq-answer">
+            참가가 확정되신 분들에 한해 모임 및 장소에 관해 따로 연락을 드리고
+            있습니다.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>대전 거주자만 가능한가요?</summary>
+          <div class="faq-answer">
+            아뇨! 대전에 오실 수만 있다면 거주지에 상관없이 가능합니다.<br />
+            다만 홍보 대상인 지인들의 거주지와 행사장소를 고려했을 때 대전
+            거주자가 많을 거라고 예상하고 있습니다.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>다른 참가자의 연락처를 공유받을 수 있나요?</summary>
+          <div class="faq-answer">
+            소개팅 마지막 투표 때 양방향 투표가 성사되신 분들에 한해서 연락처를
+            공유해드리고 있습니다.<br />
+            이외의 연락처 및 SNS 공유는 소개팅이 끝난 뒤, 자유롭게 공유하시면
+            됩니다!
+          </div>
+        </details>
+      </div>
+
+      <!-- CTA Button (Fixed Bottom) -->
+      <div class="cta-btn-wrapper">
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSe7rrPgBm9KcfDvagXyedycf_yeM0NQrpttorh5JJLRWTaqzQ/viewform?usp=header"
+          target="_blank"
+          class="cta-btn"
+        >
+          사주연애 참가하기
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
